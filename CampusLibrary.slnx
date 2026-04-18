@@ -1,0 +1,6 @@
+﻿<Solution>
+  <Project Path="CampusLibrary.Core/CampusLibrary.Core.csproj" />
+  <Project Path="CampusLibrary.Tests/CampusLibrary.Tests.csproj" />
+  <Project Path="CampusLibrary.WinForms/CampusLibrary.WinForms.csproj" />
+</Solution>
+
