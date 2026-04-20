@@ -3,6 +3,7 @@ using CampusLibrary.Core.Repositories;
 
 namespace CampusLibrary.Core.Services;
 
+// 图书业务服务：封装图书增删改查的业务校验与日志。
 public class BookService
 {
     private readonly BookRepository _books;
@@ -18,6 +19,7 @@ public class BookService
 
     public OperationResult AddBook(string operatorUsername, Book book)
     {
+        // 基础字段校验
         if (string.IsNullOrWhiteSpace(book.Isbn) || string.IsNullOrWhiteSpace(book.Title))
         {
             return OperationResult.Fail("ISBN和书名不能为空");
@@ -41,6 +43,7 @@ public class BookService
 
     public OperationResult UpdateBook(string operatorUsername, Book book)
     {
+        // 当前仅限制库存不能为负数。
         if (book.StockQty < 0)
         {
             return OperationResult.Fail("库存不能小于0");

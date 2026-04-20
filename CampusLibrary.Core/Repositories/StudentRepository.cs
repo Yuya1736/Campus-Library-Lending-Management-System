@@ -4,6 +4,7 @@ using Dapper;
 
 namespace CampusLibrary.Core.Repositories;
 
+// 学生仓储：当前项目主要用于借阅关联与借阅次数统计。
 public class StudentRepository
 {
     private readonly DbConnectionFactory _factory;
@@ -16,6 +17,7 @@ public class StudentRepository
     public List<Student> GetAll()
     {
         using var conn = _factory.CreateOpenConnection();
+        // student_id 为字符串，便于兼容不同学校学号格式。
         const string sql = @"
 SELECT student_id AS StudentId, name AS Name, class_name AS ClassName,
        contact AS Contact, total_borrow_count AS TotalBorrowCount
@@ -27,6 +29,7 @@ ORDER BY student_id";
     public Student? GetById(string studentId)
     {
         using var conn = _factory.CreateOpenConnection();
+        // 按学号精准查询。
         const string sql = @"
 SELECT student_id AS StudentId, name AS Name, class_name AS ClassName,
        contact AS Contact, total_borrow_count AS TotalBorrowCount

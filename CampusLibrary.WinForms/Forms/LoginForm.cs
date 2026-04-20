@@ -3,6 +3,7 @@ using CampusLibrary.WinForms.Infrastructure;
 
 namespace CampusLibrary.WinForms.Forms;
 
+// 登录窗体：负责账号认证，并在界面上显示数据库连通状态。
 public class LoginForm : Form
 {
     private readonly AppServices _services;
@@ -78,6 +79,7 @@ public class LoginForm : Form
         root.Controls.Add(panel, 1, 1);
         Controls.Add(root);
 
+        // 窗体显示后探测数据库可用性，给用户即时反馈。
         Shown += (_, _) => UpdateDatabaseStatusTip();
     }
 
@@ -91,6 +93,7 @@ public class LoginForm : Form
         }
         catch (Exception ex)
         {
+            // 直接展示异常信息，便于排查连接字符串/网络问题。
             _lblDbStatus.Text = $"数据库状态：连接失败（{ex.Message}）";
             _lblDbStatus.ForeColor = Color.Firebrick;
         }
@@ -98,6 +101,7 @@ public class LoginForm : Form
 
     private void Login()
     {
+        // 认证由 AuthService 完成，窗体只负责输入和结果呈现。
         var user = _services.AuthService.Login(_txtUsername.Text.Trim(), _txtPassword.Text.Trim());
         if (user is null)
         {

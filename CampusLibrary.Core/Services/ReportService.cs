@@ -3,6 +3,7 @@ using Dapper;
 
 namespace CampusLibrary.Core.Services;
 
+// 报表服务：提供热门图书、分类借阅率、超期名单查询。
 public class ReportService
 {
     private readonly Data.DbConnectionFactory _factory;
@@ -17,6 +18,7 @@ public class ReportService
     public List<dynamic> GetPopularBooks(int top = 10)
     {
         using var conn = _factory.CreateOpenConnection();
+        // 按借阅次数倒序取 TopN，次数相同再按书名排序。
         const string sql = @"
 SELECT isbn AS Isbn, title AS Title, borrow_count AS BorrowCount
 FROM book
@@ -28,6 +30,7 @@ LIMIT @top";
     public List<dynamic> GetBorrowRateByCategory()
     {
         using var conn = _factory.CreateOpenConnection();
+        // 这里的 AvgBorrowCount = 总借阅次数 / 该分类图书数量。
         const string sql = @"
 SELECT category AS Category,
        COUNT(*) AS BookCount,

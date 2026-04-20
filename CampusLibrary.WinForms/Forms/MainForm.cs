@@ -3,6 +3,7 @@ using CampusLibrary.WinForms.Infrastructure;
 
 namespace CampusLibrary.WinForms.Forms;
 
+// 主窗体：承载系统主要功能页签（图书、借还、超期、统计、权限）。
 public class MainForm : Form
 {
     private readonly AppServices _services;
@@ -45,6 +46,7 @@ public class MainForm : Form
         tabControl.TabPages.Add(CreateOverdueTab());
         tabControl.TabPages.Add(CreateReportTab());
 
+        // 只有管理员可见“权限管控”页签。
         if (string.Equals(_currentUser.Role, "管理员", StringComparison.OrdinalIgnoreCase))
         {
             tabControl.TabPages.Add(CreateUserTab());
@@ -57,6 +59,7 @@ public class MainForm : Form
 
     private TabPage CreateBookTab()
     {
+        // 图书基础管理页：上方列表、下方编辑区。
         var page = new TabPage("基础管理-图书");
 
         var root = new TableLayoutPanel { Dock = DockStyle.Fill, RowCount = 2 };
@@ -113,6 +116,7 @@ public class MainForm : Form
 
     private TabPage CreateBorrowTab()
     {
+        // 借阅归还页：录入学号+ISBN，触发借书/还书业务。
         var page = new TabPage("借阅归还");
         var root = new TableLayoutPanel { Dock = DockStyle.Fill, RowCount = 2 };
         root.RowStyles.Add(new RowStyle(SizeType.Percent, 70));
@@ -158,6 +162,7 @@ public class MainForm : Form
 
     private TabPage CreateOverdueTab()
     {
+        // 超期提醒页：展示超期记录，并支持手动刷新。
         var page = new TabPage("超期提醒");
         var panel = new Panel { Dock = DockStyle.Fill };
         var btn = new Button { Text = "刷新超期名单", Dock = DockStyle.Top, Height = 35 };
@@ -170,6 +175,7 @@ public class MainForm : Form
 
     private TabPage CreateReportTab()
     {
+        // 统计分析页：热门图书 + 分类借阅率。
         var page = new TabPage("统计分析");
         var split = new SplitContainer { Dock = DockStyle.Fill, Orientation = Orientation.Horizontal };
         var topPanel = new Panel { Dock = DockStyle.Fill };
@@ -189,6 +195,7 @@ public class MainForm : Form
 
     private TabPage CreateUserTab()
     {
+        // 权限管控页（管理员专属）：新增/删除用户。
         var page = new TabPage("权限管控");
         _cmbRole.Items.AddRange(["管理员", "操作员"]);
         _cmbRole.SelectedIndex = 1;
@@ -238,6 +245,7 @@ public class MainForm : Form
     {
         try
         {
+            // 统一执行入口：集中处理提示与异常，避免每个按钮重复写 try/catch。
             var result = action();
             MessageBox.Show(result.Message, result.Success ? "成功" : "失败",
                 MessageBoxButtons.OK,
@@ -255,6 +263,7 @@ public class MainForm : Form
 
     private Book ReadBookFromEditor()
     {
+        // 将编辑区控件值映射为 Book 对象，交给服务层处理。
         return new Book
         {
             Isbn = _txtIsbn.Text.Trim(),
@@ -268,6 +277,7 @@ public class MainForm : Form
 
     private void FillBookEditor()
     {
+        // 点击表格行时回填编辑区，便于修改。
         if (_bookGrid.CurrentRow?.DataBoundItem is not Book book)
         {
             return;
@@ -283,6 +293,7 @@ public class MainForm : Form
 
     private void LoadAllData()
     {
+        // 首次加载/操作成功后统一刷新各页数据。
         LoadBooks();
         LoadBorrowRecords();
         LoadOverdue();
@@ -323,6 +334,7 @@ public class MainForm : Form
 
     private void ApplyIsbnHeader(DataGridView grid)
     {
+        // 避免 DataGridView 自动列名显示为 Isbn（统一改成 ISBN）。
         if (grid.Columns.Contains("Isbn"))
         {
             grid.Columns["Isbn"]!.HeaderText = "ISBN";

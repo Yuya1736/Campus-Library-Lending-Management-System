@@ -3,10 +3,13 @@ using System.Windows.Forms;
 
 namespace CampusLibrary.WinForms.Styling;
 
+// 运行时样式应用器：
+// 在窗体创建后统一遍历控件树，为不同控件类型应用主题样式。
 public static class UiRuntimeStyler
 {
     public static void ApplyToForm(Form form)
     {
+        // 先设置窗体级基础样式，再递归子控件。
         UiTheme.StyleForm(form);
         StyleControlTree(form.Controls);
     }
@@ -15,6 +18,7 @@ public static class UiRuntimeStyler
     {
         foreach (Control control in controls)
         {
+            // 按控件类型分发样式，避免每个窗体手动设置样式细节。
             switch (control)
             {
                 case TextBox:
@@ -45,6 +49,7 @@ public static class UiRuntimeStyler
 
             if (control.HasChildren)
             {
+                // 递归处理嵌套容器中的控件。
                 StyleControlTree(control.Controls);
             }
         }
@@ -52,6 +57,7 @@ public static class UiRuntimeStyler
 
     private static void StyleButtonBySemantic(Button button)
     {
+        // 根据按钮文案推断语义并选择样式（主按钮/次按钮/危险按钮）。
         var text = button.Text.Trim();
         if (text.Contains("删除", StringComparison.OrdinalIgnoreCase))
         {
@@ -73,6 +79,7 @@ public static class UiRuntimeStyler
 
     private static void StyleLabel(Label label)
     {
+        // 标题与普通标签区分字体和颜色层级。
         if (label.Text.Contains("校园图书", StringComparison.OrdinalIgnoreCase))
         {
             label.Font = UiTheme.TitleFont;

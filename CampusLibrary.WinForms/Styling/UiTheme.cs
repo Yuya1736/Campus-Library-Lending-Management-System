@@ -3,8 +3,10 @@ using System.Windows.Forms;
 
 namespace CampusLibrary.WinForms.Styling;
 
+// 主题定义中心：统一管理颜色、字体和常用控件样式。
 public static class UiTheme
 {
+    // 颜色系统
     public static readonly Color Background = Color.FromArgb(245, 248, 252);
     public static readonly Color Surface = Color.White;
     public static readonly Color Primary = Color.FromArgb(35, 99, 186);
@@ -14,11 +16,13 @@ public static class UiTheme
     public static readonly Color MutedText = Color.FromArgb(106, 115, 130);
     public static readonly Color Border = Color.FromArgb(220, 226, 236);
 
+    // 字体系统
     public static readonly Font TitleFont = new("Microsoft YaHei UI", 14, FontStyle.Bold);
     public static readonly Font BodyFont = new("Microsoft YaHei UI", 10, FontStyle.Regular);
 
     public static void StyleForm(Form form)
     {
+        // 全局默认：背景、字体、前景色。
         form.BackColor = Background;
         form.Font = BodyFont;
         form.ForeColor = Text;
@@ -26,6 +30,7 @@ public static class UiTheme
 
     public static void StyleInput(Control control)
     {
+        // 统一输入控件的视觉基线。
         control.Font = BodyFont;
         control.BackColor = Color.White;
         control.ForeColor = Text;
@@ -48,6 +53,7 @@ public static class UiTheme
 
     public static void StylePrimaryButton(Button button)
     {
+        // 主要动作按钮（新增、登录、借书等）
         button.BackColor = Primary;
         button.ForeColor = Color.White;
         button.FlatStyle = FlatStyle.Flat;
@@ -59,6 +65,7 @@ public static class UiTheme
 
     public static void StyleSecondaryButton(Button button)
     {
+        // 次要动作按钮（刷新等）
         button.BackColor = Color.White;
         button.ForeColor = Primary;
         button.FlatStyle = FlatStyle.Flat;
@@ -71,6 +78,7 @@ public static class UiTheme
 
     public static void StyleDangerButton(Button button)
     {
+        // 危险动作按钮（删除等）
         button.BackColor = Color.White;
         button.ForeColor = Danger;
         button.FlatStyle = FlatStyle.Flat;
@@ -83,6 +91,7 @@ public static class UiTheme
 
     public static void StyleDataGrid(DataGridView grid)
     {
+        // 表格统一行为：只读、整行选中、铺满列宽。
         grid.BackgroundColor = Surface;
         grid.BorderStyle = BorderStyle.None;
         grid.RowHeadersVisible = false;
@@ -92,6 +101,7 @@ public static class UiTheme
         grid.MultiSelect = false;
         grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
+        // 表头样式
         grid.ColumnHeadersDefaultCellStyle.BackColor = Primary;
         grid.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
         grid.ColumnHeadersDefaultCellStyle.Font = new Font("Microsoft YaHei UI", 10, FontStyle.Bold);
@@ -99,6 +109,7 @@ public static class UiTheme
         grid.ColumnHeadersHeight = 36;
         grid.EnableHeadersVisualStyles = false;
 
+        // 内容区样式
         grid.DefaultCellStyle.SelectionBackColor = Color.FromArgb(217, 234, 255);
         grid.DefaultCellStyle.SelectionForeColor = Text;
         grid.DefaultCellStyle.BackColor = Color.White;
@@ -112,6 +123,7 @@ public static class UiTheme
 
     public static void StyleTabControl(TabControl tabControl)
     {
+        // OwnerDraw：允许自绘 Tab 背景和文本颜色。
         tabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
         tabControl.ItemSize = new Size(140, 32);
         tabControl.SizeMode = TabSizeMode.Fixed;
@@ -134,6 +146,7 @@ public static class UiTheme
 
     public static Panel CreateCardPanel()
     {
+        // 便捷卡片容器（当前项目中可按需复用）。
         return new Panel
         {
             BackColor = Surface,
