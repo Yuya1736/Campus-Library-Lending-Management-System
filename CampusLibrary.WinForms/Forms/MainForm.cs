@@ -290,13 +290,26 @@ public class MainForm : Form
         LoadUsers();
     }
 
-    private void LoadBooks() => _bookGrid.DataSource = _services.BookService.GetBooks();
-    private void LoadBorrowRecords() => _borrowGrid.DataSource = _services.BorrowService.GetBorrowRecords();
-    private void LoadOverdue() => _overdueGrid.DataSource = _services.ReportService.GetOverdueList();
+    private void LoadBooks()
+    {
+        _bookGrid.DataSource = _services.BookService.GetBooks();
+        ApplyIsbnHeader(_bookGrid);
+    }
+    private void LoadBorrowRecords()
+    {
+        _borrowGrid.DataSource = _services.BorrowService.GetBorrowRecords();
+        ApplyIsbnHeader(_borrowGrid);
+    }
+    private void LoadOverdue()
+    {
+        _overdueGrid.DataSource = _services.ReportService.GetOverdueList();
+        ApplyIsbnHeader(_overdueGrid);
+    }
 
     private void LoadReports()
     {
         _popularGrid.DataSource = _services.ReportService.GetPopularBooks();
+        ApplyIsbnHeader(_popularGrid);
         _rateGrid.DataSource = _services.ReportService.GetBorrowRateByCategory();
     }
 
@@ -305,6 +318,14 @@ public class MainForm : Form
         if (string.Equals(_currentUser.Role, "管理员", StringComparison.OrdinalIgnoreCase))
         {
             _userGrid.DataSource = _services.AuthService.GetUsers();
+        }
+    }
+
+    private void ApplyIsbnHeader(DataGridView grid)
+    {
+        if (grid.Columns.Contains("Isbn"))
+        {
+            grid.Columns["Isbn"]!.HeaderText = "ISBN";
         }
     }
 }
